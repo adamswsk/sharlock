@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ucard.sharlock.tags.mapper.TagBaseinfoMapper">
+  
+	<resultMap id="BaseResultMap" type="com.ucard.sharlock.tags.entity.TagBaseinfo">        
+		<!-- <id column="id" property="" />   -->      
+		<result column="tag_id" property="tagId" />        
+		<result column="tag_name" property="tagName" />        
+		<result column="tag_color" property="tagColor" />        
+		<result column="tag_deviceType" property="tagDevicetype" />  
+		<result column="tag_group" property="tagGroup" />      
+		<!-- <association property="guru" javaType="com.baizhi.entity.Guru">            
+		<id column="gid" property="id" />            
+		<result column="dharma" property="dharma" />         
+		</association>    -->
+	</resultMap>  
+ 
+	<sql id="Base_Column_List">        
+		tag_id, tag_name,tag_color    
+	</sql>       
+	<select id="findAll" resultMap="BaseResultMap">
+		select <include refid="Base_Column_List" /> from tag_baseinfo
+	</select>
+</mapper>
