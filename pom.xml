@@ -20,6 +20,12 @@
 
 	<dependencies>
 		<dependency>
+			<groupId>com.ucard.sharlock</groupId>
+			<artifactId>sharlock-core</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+		
+		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
@@ -91,6 +97,24 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
+			<!-- <plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-war-plugin</artifactId>
+				<version>2.6</version>
+				<configuration>
+					<version>3.1</version>
+					<failOnMissingWebXml>false</failOnMissingWebXml>
+				</configuration>
+			</plugin> -->
+			<!--执行测试用例的插件-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <!--跳过项目运行测试用例-->
+                    <skipTests>true</skipTests>
+                </configuration>
+            </plugin>
 		</plugins>
 		<resources>
 			<resource>
