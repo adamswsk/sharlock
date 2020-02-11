@@ -2,6 +2,9 @@ package com.ucard.sharlock.tags.service.impl;
 
 import java.util.List;
 
+import com.ucard.sharlock.core.page.MybatisPageHelper;
+import com.ucard.sharlock.core.page.PageRequest;
+import com.ucard.sharlock.core.page.PageResult;
 import com.ucard.sharlock.tags.entity.TagBaseinfo;
 import com.ucard.sharlock.tags.mapper.TagBaseinfoMapper;
 import com.ucard.sharlock.tags.service.ITagBaseinfoService;
@@ -28,5 +31,11 @@ public class TagBaseinfoServiceImpl extends ServiceImpl<TagBaseinfoMapper, TagBa
 	public List<TagBaseinfo> findAll() {
 		//return (List<TagBaseinfo>) tagBaseinfoMapper.selectList(null);
 		return (List<TagBaseinfo>) tagBaseinfoMapper.findAll();
+	}
+
+	@Override
+	public PageResult findPage(PageRequest pageRequest) {
+		// TODO Auto-generated method stub
+		return MybatisPageHelper.findPage(pageRequest, tagBaseinfoMapper);
 	}
 }

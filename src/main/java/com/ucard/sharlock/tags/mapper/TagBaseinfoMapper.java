@@ -21,4 +21,10 @@ public interface TagBaseinfoMapper extends BaseMapper<TagBaseinfo> {
 	 */
 	public abstract List<TagBaseinfo> findAll();
 	
+	/**
+	 * 
+	 * @return
+	 */
+	public abstract List<TagBaseinfo> findPage();
+	
 }

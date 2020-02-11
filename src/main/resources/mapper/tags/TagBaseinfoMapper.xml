@@ -21,4 +21,7 @@
 	<select id="findAll" resultMap="BaseResultMap">
 		select <include refid="Base_Column_List" /> from tag_baseinfo
 	</select>
+	<select id="findPage" resultMap="BaseResultMap">
+		select <include refid="Base_Column_List" /> from tag_baseinfo
+	</select>
 </mapper>

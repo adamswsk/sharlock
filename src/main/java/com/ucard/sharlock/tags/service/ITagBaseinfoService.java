@@ -2,6 +2,8 @@ package com.ucard.sharlock.tags.service;
 
 import java.util.List;
 
+import com.ucard.sharlock.core.page.PageRequest;
+import com.ucard.sharlock.core.page.PageResult;
 import com.ucard.sharlock.tags.entity.TagBaseinfo;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -21,4 +23,9 @@ public interface ITagBaseinfoService extends IService<TagBaseinfo> {
 	 */
 	public abstract List<TagBaseinfo> findAll();
 	
+	/**
+	 * 
+	 * @return
+	 */
+	PageResult findPage(PageRequest pageRequest);
 }
