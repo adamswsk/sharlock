@@ -31,3 +31,5 @@ pagehelper:
   reasonable: true
   supportMethodsArguments: true
 params: count=countSql
+decisionEngine:
+  url: http://localhost:8080
