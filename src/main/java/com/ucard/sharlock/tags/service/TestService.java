@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.alibaba.fastjson.JSONObject;
 
-@FeignClient(url = "${decisionEngine.url}",name="engine")
+@FeignClient(url = "${decisionEngine.url}",name="testengine")
 public interface TestService {
 	@RequestMapping(value="/qpe/getPEInfo",method= RequestMethod.POST)
 	public JSONObject getEngineMesasge(@RequestParam("humanReadable") String humanReadable);
