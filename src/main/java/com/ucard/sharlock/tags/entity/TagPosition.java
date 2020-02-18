@@ -1,9 +1,10 @@
 package com.ucard.sharlock.tags.entity;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import com.baomidou.mybatisplus.annotation.TableField;
+
 import java.io.Serializable;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -32,7 +33,7 @@ public class TagPosition implements Serializable {
      * 位置更新时间
      */
     @TableField("tag_positionTS")
-    private LocalDateTime tagPositionts;
+    private Long tagPositionts;
 
     /**
      * smoothedX位置

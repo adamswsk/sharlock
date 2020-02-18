@@ -1,6 +1,5 @@
 package com.ucard.sharlock.tags.entity;
 
-import java.time.LocalDateTime;
 import com.baomidou.mybatisplus.annotation.TableField;
 import java.io.Serializable;
 import lombok.Data;
@@ -31,7 +30,7 @@ public class TagZonesinfo implements Serializable {
      * 位置更新时间
      */
     @TableField("tag_positionTS")
-    private LocalDateTime tagPositionts;
+    private Long tagPositionts;
 
     /**
      * zoneID

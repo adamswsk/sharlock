@@ -1,7 +1,6 @@
 package com.ucard.sharlock.tags.entity;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import com.baomidou.mybatisplus.annotation.TableField;
 import java.io.Serializable;
 import lombok.Data;
@@ -32,7 +31,7 @@ public class TagStatusinfo implements Serializable {
      * 最后包时间
      */
     @TableField("tag_lastpacketTS")
-    private LocalDateTime tagLastpacketts;
+    private Long tagLastpacketts;
 
     /**
      * 电量
@@ -44,7 +43,7 @@ public class TagStatusinfo implements Serializable {
      * 电量更新时间
      */
     @TableField("tag_batteryVoltageTS")
-    private LocalDateTime tagBatteryvoltagets;
+    private Long tagBatteryvoltagets;
 
     /**
      * 电量报警
@@ -56,7 +55,7 @@ public class TagStatusinfo implements Serializable {
      * 电量报警时间
      */
     @TableField("tag_batteryAlarmTS")
-    private LocalDateTime tagBatteryalarmts;
+    private Long tagBatteryalarmts;
 
     /**
      * 按钮状态
@@ -68,19 +67,19 @@ public class TagStatusinfo implements Serializable {
      * 按钮状态更新时间
      */
     @TableField("tag_buttonStateTS")
-    private LocalDateTime tagButtonstatets;
+    private Long tagButtonstatets;
 
     /**
      * 按钮按压时间
      */
     @TableField("tag_lastButtonPressTS")
-    private LocalDateTime tagLastbuttonpressts;
+    private Long tagLastbuttonpressts;
 
     /**
      * 按钮2按压时间
      */
     @TableField("tag_lastButton2PressTS")
-    private LocalDateTime tagLastbutton2pressts;
+    private Long tagLastbutton2pressts;
 
     /**
      * 信号强度
@@ -91,7 +90,7 @@ public class TagStatusinfo implements Serializable {
      * 信号强度更新时间
      */
     @TableField("tag_rssiTS")
-    private LocalDateTime tagRssits;
+    private Long tagRssits;
 
     /**
      * 基站ID
@@ -108,7 +107,7 @@ public class TagStatusinfo implements Serializable {
      * 信号速率更新时间
      */
     @TableField("tag_txrateTS")
-    private LocalDateTime tagTxratets;
+    private Long tagTxratets;
 
     /**
      * 信号能量
@@ -119,7 +118,7 @@ public class TagStatusinfo implements Serializable {
      * 信号能量更新时间
      */
     @TableField("tag_txpowerTS")
-    private LocalDateTime tagTxpowerts;
+    private Long tagTxpowerts;
 
 
 }
