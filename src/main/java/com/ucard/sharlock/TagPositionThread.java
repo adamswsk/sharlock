@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
+import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -12,9 +13,11 @@ import org.springframework.stereotype.Component;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.ucard.sharlock.tags.entity.TagAreainfo;
 import com.ucard.sharlock.tags.entity.TagBaseinfo;
 import com.ucard.sharlock.tags.entity.TagPosition;
+import com.ucard.sharlock.tags.entity.TagStatusinfo;
 import com.ucard.sharlock.tags.entity.TagZonesinfo;
 import com.ucard.sharlock.tags.service.ILocationService;
 import com.ucard.sharlock.tags.service.ITagAreainfoService;
@@ -46,10 +49,10 @@ public class TagPositionThread{
 	@Autowired
 	private ITagStatusinfoService tagStatusinfoService;
 	
-	@Scheduled(initialDelay = 1000, fixedDelay = 10000)
+	@Scheduled(initialDelay = 1000, fixedDelay = 200)
 	public void getTagPosition() throws Exception {
 		
-		System.out.println("schedule getTagPosition on every 10 s");
+		System.out.println("schedule getTagPosition on every 200 ms");
 		
 		JSONObject result = locationService.getTagPosition("2", null, null, null, null, null, "true", null, null, null);
 		//Timestamp responseTS = result.getTimestamp("responseTS");
@@ -63,6 +66,7 @@ public class TagPositionThread{
 			//System.out.println("时间： 11111111111111"+tag);
 			String id = tag.getString("id");
 			Long positionTS = tag.getLong("positionTS");
+			
 			//tag_position表内容
 			JSONArray sp = tag.getJSONArray("smoothedPosition");
 			double spAccuracy = tag.getDoubleValue("smoothedPositionAccuracy");
@@ -84,7 +88,17 @@ public class TagPositionThread{
 			tp.setTagCovariancematrixxy(covarianceMatrix.getBigDecimal(1));
 			tp.setTagCovariancematrixyx(covarianceMatrix.getBigDecimal(2));
 			tp.setTagCovariancematrixyy(covarianceMatrix.getBigDecimal(3));
-			tagPositionService.save(tp);
+			QueryWrapper<TagPosition> queryWrapper = new QueryWrapper<>();
+			queryWrapper.eq("tag_id", id).eq("tag_positionTS", positionTS);
+			if(tagPositionService.count(queryWrapper)==0)
+			{
+				tagPositionService.save(tp);
+				System.out.println("1: SAVED");
+			}
+			else
+			{
+				System.out.println("1: "+id+"-"+positionTS+"has exited");
+			}
 			//tag_areainfo表内容
 			String coordinateSystemId = tag.getString("coordinateSystemId");
 			String coordinateSystemName = tag.getString("coordinateSystemName");
@@ -97,7 +111,17 @@ public class TagPositionThread{
 			tai.setTagCoordinatesystemid(coordinateSystemId);
 			tai.setTagCoordinatesystemname(coordinateSystemName);
 			tai.setTagAreaid(areaId);
-			tagAreainfoService.save(tai);
+			QueryWrapper<TagAreainfo> queryAreainfoWrapper = new QueryWrapper<>();
+			queryAreainfoWrapper.eq("tag_id", id).eq("tag_positionTS", positionTS);
+			if(tagAreainfoService.count(queryAreainfoWrapper)==0)
+			{
+				tagAreainfoService.save(tai);
+				System.out.println("2: SAVED");
+			}
+			else
+			{
+				System.out.println("2: "+id+"-"+positionTS+"has exited");
+			}
 			//tag_zonesinfo表内容
 			JSONArray zones = tag.getJSONArray("zones");
 			if(zones==null)
@@ -116,7 +140,18 @@ public class TagPositionThread{
 					tzi.setTagPositionts(positionTS);
 					tzi.setTagZoneid(ID);
 					tzi.setTagZonename(name);
-					tagZonesinfoService.save(tzi);
+					QueryWrapper<TagZonesinfo> queryZonesinfoWrapper = new QueryWrapper<>();
+					queryZonesinfoWrapper.eq("tag_id", id).eq("tag_positionTS", positionTS);
+					if(tagZonesinfoService.count(queryZonesinfoWrapper)==0)
+					{
+						tagZonesinfoService.save(tzi);
+						System.out.println("3: SAVED");
+					}
+					else
+					{
+						System.out.println("3: "+id+"-"+positionTS+"has exited");
+					}
+					
 				}
 			}
 		}
@@ -147,8 +182,64 @@ public class TagPositionThread{
 			tbi.setTagGroup(group);
 			tbi.setTagId(id);
 			tbi.setTagName(name);
-			tagBaseinfoService.saveOrUpdate(tbi);//TODO 重复的药删除
+			QueryWrapper<TagBaseinfo> queryWrapper1 = new QueryWrapper<>();
+			queryWrapper1.eq("tag_id", id);
+			if(tagBaseinfoService.count(queryWrapper1)==0)
+			{
+				tagBaseinfoService.save(tbi);
+				System.out.println("4: SAVED");
+			}
+			else
+			{
+				System.out.println("4: "+id+" has exited");
+			}
+			
 			//tagStatusinfoService
+			TagStatusinfo tsi = new TagStatusinfo();
+			Long lastPacketTS = tag.getLong("lastPacketTS");
+			double batteryVoltage = tag.getDoubleValue("batteryVoltage");
+			Long batteryVoltageTS = tag.getLong("batteryVoltageTS");
+			String batteryAlarm = tag.getString("batteryAlarm");
+			Long batteryAlarmTS = tag.getLong("batteryAlarmTS");
+			String buttonState = tag.getString("buttonState");
+			Long buttonStateTS = tag.getLong("buttonStateTS");
+			Long lastButtonPressTS = tag.getLong("lastButtonPressTS");
+			Long lastButton2PressTS = tag.getLong("lastButton2PressTS");
+			double rssi = tag.getDoubleValue("rssi");
+			Long rssiTS = tag.getLong("rssiTS");
+			String rssiLocator = tag.getString("rssiLocator");
+			double txRate = tag.getDoubleValue("txRate");
+			Long txRateTS = tag.getLong("txRateTS");
+			double txPower = tag.getDoubleValue("txPower");
+			Long txPowerTS = tag.getLong("txPowerTS");
+			tsi.setTagBatteryalarm(batteryAlarm);
+			tsi.setTagBatteryalarmts(batteryAlarmTS);
+			tsi.setTagBatteryvoltage(BigDecimal.valueOf(batteryVoltage));
+			tsi.setTagBatteryvoltagets(batteryVoltageTS);
+			tsi.setTagButtonstate(buttonState);
+			tsi.setTagButtonstatets(buttonStateTS);
+			tsi.setTagId(id);
+			tsi.setTagLastbutton2pressts(lastButton2PressTS);
+			tsi.setTagLastbuttonpressts(lastButtonPressTS);
+			tsi.setTagLastpacketts(lastPacketTS);
+			tsi.setTagRssi(BigDecimal.valueOf(rssi));
+			tsi.setTagRssilocator(rssiLocator);
+			tsi.setTagRssits(rssiTS);
+			tsi.setTagTxpower(BigDecimal.valueOf(txPower));
+			tsi.setTagTxpowerts(txPowerTS);
+			tsi.setTagTxrate(BigDecimal.valueOf(txRate));
+			tsi.setTagTxratets(txRateTS);
+			QueryWrapper<TagStatusinfo> queryWrapper2 = new QueryWrapper<>();
+			queryWrapper2.eq("tag_id", id).eq("tag_lastPacketTS", lastPacketTS);
+			if(tagStatusinfoService.count(queryWrapper2)==0)
+			{
+				tagStatusinfoService.save(tsi);
+				System.out.println("5: SAVED");
+			}
+			else
+			{
+				System.out.println("5: "+id+"-"+lastPacketTS+"has exited");
+			}
 			
 		}
 		

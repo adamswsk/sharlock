@@ -1,7 +1,10 @@
 package com.ucard.sharlock.tags.entity;
 
 import java.math.BigDecimal;
+
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
 
 import java.io.Serializable;
 
@@ -24,6 +27,8 @@ public class TagPosition implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    @TableId(value = "id",type = IdType.AUTO)//在自增主键的变量加上即可
+    private Integer Id;
     /**
      * TagID
      */
