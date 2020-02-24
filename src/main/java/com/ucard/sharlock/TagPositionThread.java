@@ -3,6 +3,10 @@ package com.ucard.sharlock;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,6 +53,10 @@ public class TagPositionThread{
 	@Autowired
 	private ITagStatusinfoService tagStatusinfoService;
 	
+	private static int num = 0;
+	private static Map<Integer,String> map= new HashMap<Integer,String>();
+	private static Set<String> hashset = new HashSet<>();
+/*	
 	@Scheduled(initialDelay = 1000, fixedDelay = 200)
 	public void getTagPosition() throws Exception {
 		
@@ -244,4 +252,112 @@ public class TagPositionThread{
 		}
 		
 	}
+*/	
+/*	
+	//测试接口
+	@Scheduled(initialDelay = 1000, fixedDelay = 500)
+	public void sendTaginformation() throws Exception {
+		System.out.println("schedule sendTaginformation on every 500 ms");
+		String data = String.format("%08x", num);
+		String formatdata = "0xFF 0x5D 0x00 0x11 0x22 0x33 0x44 0x55 0x66 0x77 0x88 0x99 "+"0x"+data.substring(0, 2)+" 0x"+data.substring(2, 4)+" 0x"+data.substring(4, 6)+" 0x"+data.substring(6, 8);
+		num++;
+		System.out.println("已发送指令条数： "+num);
+		JSONObject result = locationService.sendQuuppaRequest("e2f616644c6e", formatdata, "true",null);
+		String status = result.getString("status");
+		if(status.equalsIgnoreCase("Ok"))//发送成功
+		{
+			
+			JSONArray tags = result.getJSONArray("tags");
+			for(int i=0;i<tags.size();i++)
+			{
+				JSONObject tag= (JSONObject) tags.getJSONObject(i);
+				String id = tag.getString("id");
+				if(id.equalsIgnoreCase("e2f616644c6e"))
+				{
+					int sequenceNumber = (int)tag.getInteger("sequenceNumber");
+					map.put(sequenceNumber, formatdata);//保存Key和值
+				}
+				else
+				{
+					continue;
+				}
+			}
+		}
+		else
+		{
+			System.out.println("sendTaginformation failed");
+		}
+	}
+	
+	@Scheduled(initialDelay = 1000, fixedDelay = 1000)
+	public void receiveTaginformation() throws Exception {
+		System.out.println("schedule sendTaginformation on every 1 ms");
+		//接收payLoad
+		JSONObject result2 = locationService.getTagPayloadData("e2f616644c6e", "true");
+		JSONArray tags_payload = result2.getJSONArray("tags");
+		for(int l=0;l<tags_payload.size();l++)
+		{
+			JSONObject tag_payload= (JSONObject) tags_payload.getJSONObject(l);
+			JSONArray payloadData = tag_payload.getJSONArray("payloadData");
+			if(payloadData==null)
+			{
+				continue;
+			}
+			for(int m=0;m<payloadData.size();m++)
+			{
+				if(payloadData.getJSONObject(m)==null)
+				{
+					continue;
+				}
+				hashset.add(payloadData.getJSONObject(m).getString("data"));
+				//System.out.println(payloadData.getJSONObject(m));
+			}
+			
+		}
+		JSONObject receive = locationService.getQuuppaRequestResponse("e2f616644c6e", "true");
+		JSONArray tags_receive = receive.getJSONArray("tags");
+						
+		for(int j=0;j<tags_receive.size();j++)
+		{
+			JSONObject tag_receive= (JSONObject) tags_receive.getJSONObject(j);
+			String id_receive = tag_receive.getString("id");
+			if(id_receive.equalsIgnoreCase("e2f616644c6e"))
+			{
+				JSONArray requests = tag_receive.getJSONArray("quuppaRequests");
+				//System.out.println("quuppaRequests"+requests);
+				for(int k=0;k<requests.size();k++)
+				{
+					JSONObject Req= (JSONObject) requests.getJSONObject(k);
+					if(Req==null)
+					{
+						continue;
+					}
+					int tag_sequenceNumber = (int)Req.getInteger("sequenceNumber");
+
+					String re = Req.getString("replyData");
+					if(re!=null)
+					{
+						if(map.containsKey(tag_sequenceNumber))
+						{
+							map.remove(tag_sequenceNumber);
+							//System.out.println(tag_sequenceNumber+"received");
+						}
+						//System.out.println(re);
+					}
+					else
+					{
+						System.out.println("replyData is null");
+					}
+				}
+			}
+		}
+		System.out.println("map size : "+map.size());
+		System.out.println("hashSet size : "+hashset.size());
+		if(num>=100)
+		{
+			for (String s:hashset) {
+				System.out.println(s);
+			}
+		}
+	}*/
 }
