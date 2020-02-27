@@ -28,4 +28,14 @@ public interface ITagBaseinfoService extends IService<TagBaseinfo> {
 	 * @return
 	 */
 	PageResult findPage(PageRequest pageRequest);
+	/**
+	 * 
+	 * @return
+	 */
+	List<TagBaseinfo> findinfobytagid(String tagid);
+	/**
+	 * 
+	 * @return
+	 */
+	List<TagBaseinfo> findinfobyname(String tagname);
 }

@@ -38,4 +38,16 @@ public class TagBaseinfoServiceImpl extends ServiceImpl<TagBaseinfoMapper, TagBa
 		// TODO Auto-generated method stub
 		return MybatisPageHelper.findPage(pageRequest, tagBaseinfoMapper);
 	}
+
+	@Override
+	public List<TagBaseinfo> findinfobytagid(String tagid) {
+		// TODO Auto-generated method stub
+		return (List<TagBaseinfo>) tagBaseinfoMapper.findinfobytagid(tagid);
+	}
+
+	@Override
+	public List<TagBaseinfo> findinfobyname(String tagname) {
+		// TODO Auto-generated method stub
+		return (List<TagBaseinfo>) tagBaseinfoMapper.findinfobyname(tagname);
+	}
 }

@@ -24,4 +24,10 @@
 	<select id="findPage" resultMap="BaseResultMap">
 		select <include refid="Base_Column_List" /> from tag_baseinfo
 	</select>
+	<select id="findinfobytagid" resultMap="BaseResultMap">
+		select <include refid="Base_Column_List" /> from tag_baseinfo where tag_id = #{tagid} 
+	</select>
+		<select id="findinfobyname" resultMap="BaseResultMap">
+		select <include refid="Base_Column_List" /> from tag_baseinfo where tag_name = #{tagname} 
+	</select>
 </mapper>

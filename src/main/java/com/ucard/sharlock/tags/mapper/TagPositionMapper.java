@@ -1,5 +1,7 @@
 package com.ucard.sharlock.tags.mapper;
 
+import java.util.List;
+
 import com.ucard.sharlock.tags.entity.TagPosition;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
@@ -13,4 +15,5 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  */
 public interface TagPositionMapper extends BaseMapper<TagPosition> {
 
+	List<TagPosition> findpositionbytagid(String tagid);
 }

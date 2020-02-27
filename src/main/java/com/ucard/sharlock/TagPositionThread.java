@@ -140,7 +140,7 @@ public class TagPositionThread{
 			{
 				for(int j=0;j<zones.size();j++)
 				{
-					JSONObject zone= (JSONObject) zones.getJSONObject(i);
+					JSONObject zone= (JSONObject) zones.getJSONObject(j);
 					String ID = zone.getString("id");
 					String name = zone.getString("name");
 					TagZonesinfo tzi = new TagZonesinfo();
@@ -255,13 +255,14 @@ public class TagPositionThread{
 */	
 /*	
 	//测试接口
-	@Scheduled(initialDelay = 1000, fixedDelay = 500)
+	@Scheduled(initialDelay = 1000, fixedDelay = 5000)
 	public void sendTaginformation() throws Exception {
-		System.out.println("schedule sendTaginformation on every 500 ms");
+		System.out.println("schedule sendTaginformation on every 5 s");
 		String data = String.format("%08x", num);
 		String formatdata = "0xFF 0x5D 0x00 0x11 0x22 0x33 0x44 0x55 0x66 0x77 0x88 0x99 "+"0x"+data.substring(0, 2)+" 0x"+data.substring(2, 4)+" 0x"+data.substring(4, 6)+" 0x"+data.substring(6, 8);
 		num++;
 		System.out.println("已发送指令条数： "+num);
+		System.out.println("发送指令： "+formatdata);
 		JSONObject result = locationService.sendQuuppaRequest("e2f616644c6e", formatdata, "true",null);
 		String status = result.getString("status");
 		if(status.equalsIgnoreCase("Ok"))//发送成功
@@ -289,9 +290,9 @@ public class TagPositionThread{
 		}
 	}
 	
-	@Scheduled(initialDelay = 1000, fixedDelay = 1000)
+	@Scheduled(initialDelay = 1000, fixedDelay = 6000)
 	public void receiveTaginformation() throws Exception {
-		System.out.println("schedule sendTaginformation on every 1 ms");
+		System.out.println("schedule sendTaginformation on every 6 s");
 		//接收payLoad
 		JSONObject result2 = locationService.getTagPayloadData("e2f616644c6e", "true");
 		JSONArray tags_payload = result2.getJSONArray("tags");
@@ -305,15 +306,21 @@ public class TagPositionThread{
 			}
 			for(int m=0;m<payloadData.size();m++)
 			{
+				
 				if(payloadData.getJSONObject(m)==null)
 				{
 					continue;
 				}
-				hashset.add(payloadData.getJSONObject(m).getString("data"));
-				//System.out.println(payloadData.getJSONObject(m));
+				if(!hashset.contains(payloadData.getJSONObject(m).getString("data")))
+				{
+					hashset.add(payloadData.getJSONObject(m).getString("data"));
+				}
+				
+				System.out.println(payloadData.getJSONObject(m));
 			}
 			
 		}
+		
 		JSONObject receive = locationService.getQuuppaRequestResponse("e2f616644c6e", "true");
 		JSONArray tags_receive = receive.getJSONArray("tags");
 						
@@ -353,6 +360,7 @@ public class TagPositionThread{
 		}
 		System.out.println("map size : "+map.size());
 		System.out.println("hashSet size : "+hashset.size());
+		
 		if(num>=100)
 		{
 			for (String s:hashset) {

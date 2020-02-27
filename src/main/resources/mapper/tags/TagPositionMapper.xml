@@ -2,4 +2,29 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ucard.sharlock.tags.mapper.TagPositionMapper">
 
+	<resultMap id="PositionResultMap" type="com.ucard.sharlock.tags.entity.TagPosition">        
+		<!-- <id column="id" property="" />   -->      
+		<result column="tag_id" property="tagId" />        
+		<result column="tag_positionTS" property="tagPositionts" />        
+		<result column="tag_smoothedPostionX" property="tagSmoothedpostionx" /> 
+		<result column="tag_smoothedPostionY" property="tagSmoothedpostiony" /> 
+		<result column="tag_smoothedPostionZ" property="tagSmoothedpostionz" />        
+		<result column="tag_smoothedPostionAccuracy" property="tagSmoothedpostionaccuracy" />  
+		<result column="tag_postionX" property="tagPostionx" />  
+		<result column="tag_postionY" property="tagPostiony" />  
+		<result column="tag_postionZ" property="tagPostionz" />  
+		<result column="tag_postionAccuracy" property="tagPostionaccuracy" />     
+		<result column="tag_covarianceMatrixXX" property="tagCovariancematrixxx" />     
+		<result column="tag_covarianceMatrixXY" property="tagCovariancematrixxy" />     
+		<result column="tag_covarianceMatrixYX" property="tagCovariancematrixyx" />     
+		<result column="tag_covarianceMatrixYY" property="tagCovariancematrixyy" />
+	</resultMap>  
+ 
+	<sql id="Position_Column_List">        
+		tag_id, tag_positionTS,tag_smoothedPostionX,tag_smoothedPostionY    
+	</sql>       
+	<select id="findpositionbytagid" resultMap="PositionResultMap">
+		select <include refid="Position_Column_List" /> from tag_position where tag_id = #{tagid} order by tag_positionTS
+	</select>
+	
 </mapper>
