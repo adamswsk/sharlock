@@ -68,6 +68,10 @@ public class TagAPI4FrontEndController {
 			JSONObject tag= (JSONObject) tags.getJSONObject(i);
 			//tagBaseinfoService
 			String id = tag.getString("id");
+			if(id==null || id=="")
+			{
+				continue;
+			}
 			String color = tag.getString("color");
 			String deviceType = tag.getString("deviceType");
 			String group = tag.getString("group");
@@ -135,7 +139,7 @@ public class TagAPI4FrontEndController {
 			}
 			else
 			{
-				System.out.println("5: "+id+"-"+lastPacketTS+"has exited");
+				//System.out.println("5: "+id+"-"+lastPacketTS+"has exited");
 			}
 			
 		}
@@ -157,6 +161,10 @@ public class TagAPI4FrontEndController {
 			//System.out.println("时间： 11111111111111"+tag);
 			String id = tag.getString("id");
 			Long positionTS = tag.getLong("positionTS");
+			if(id==null || id=="")
+			{
+				continue;
+			}
 			
 			//tag_position表内容
 			JSONArray sp = tag.getJSONArray("smoothedPosition");
@@ -188,7 +196,7 @@ public class TagAPI4FrontEndController {
 			}
 			else
 			{
-				System.out.println("1: "+id+"-"+positionTS+"has exited");
+				//System.out.println("1: "+id+"-"+positionTS+"has exited");
 			}
 			//tag_areainfo表内容
 			String coordinateSystemId = tag.getString("coordinateSystemId");
@@ -211,7 +219,7 @@ public class TagAPI4FrontEndController {
 			}
 			else
 			{
-				System.out.println("2: "+id+"-"+positionTS+"has exited");
+				//System.out.println("2: "+id+"-"+positionTS+"has exited");
 			}
 			//tag_zonesinfo表内容
 			JSONArray zones = tag.getJSONArray("zones");
@@ -240,7 +248,7 @@ public class TagAPI4FrontEndController {
 					}
 					else
 					{
-						System.out.println("3: "+id+"-"+positionTS+"has exited");
+						//System.out.println("3: "+id+"-"+positionTS+"has exited");
 					}
 					
 				}

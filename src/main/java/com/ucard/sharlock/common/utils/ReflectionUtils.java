@@ -3,18 +3,17 @@ package com.ucard.sharlock.common.utils;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 /**
- * ·´ÉäÏà¹Ø¸¨Öú·½·¨
+ * ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ø¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
  * @author wusk
  * @date Feb 11, 2020
  */
 public class ReflectionUtils {
 
-	
 	/**
-	 * ¸ù¾İ·½·¨Ãûµ÷ÓÃÖ¸¶¨¶ÔÏóµÄ·½·¨
-	 * @param object Òªµ÷ÓÃ·½·¨µÄ¶ÔÏó
-	 * @param method Òªµ÷ÓÃµÄ·½·¨Ãû
-	 * @param args ²ÎÊı¶ÔÏóÊı×é
+	 * 
+	 * @param object
+	 * @param method
+	 * @param args
 	 * @return
 	 */
 	public static Object invoke(Object object, String method, Object... args) {
@@ -33,19 +32,18 @@ public class ReflectionUtils {
 			}
 		} else {
 			try {
-				throw new NoSuchMethodException(clazz.getName() + " ÀàÖĞÃ»ÓĞÕÒµ½ " + method + " ·½·¨¡£");
+				throw new NoSuchMethodException(clazz.getName() + " è¯¥ç±»çš„æ–¹æ³•ï¼š " + method + " ä¸å­˜åœ¨");
 			} catch (NoSuchMethodException e) {
 				e.printStackTrace();
 			}
 		}
 		return result;
 	}
-	
 	/**
-	 * ¸ù¾İ·½·¨ÃûºÍ²ÎÊı¶ÔÏó²éÕÒ·½·¨
+	 * 
 	 * @param clazz
 	 * @param name
-	 * @param args ²ÎÊıÊµÀıÊı¾İ
+	 * @param args
 	 * @return
 	 */
 	public static Method getMethod(Class<? extends Object> clazz, String name, Object[] args) {

@@ -257,9 +257,9 @@ public class TagPositionThread{
 	//测试接口
 	@Scheduled(initialDelay = 1000, fixedDelay = 5000)
 	public void sendTaginformation() throws Exception {
-		System.out.println("schedule sendTaginformation on every 5 s");
+		System.out.println("schedule sendTaginformation on every 500 ms");
 		String data = String.format("%08x", num);
-		String formatdata = "0xFF 0x5D 0x00 0x11 0x22 0x33 0x44 0x55 0x66 0x77 0x88 0x99 "+"0x"+data.substring(0, 2)+" 0x"+data.substring(2, 4)+" 0x"+data.substring(4, 6)+" 0x"+data.substring(6, 8);
+		String formatdata = "0xFF 0x5D 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 "+"0x"+data.substring(0, 2)+" 0x"+data.substring(2, 4)+" 0x"+data.substring(4, 6)+" 0x"+data.substring(6, 8);
 		num++;
 		System.out.println("已发送指令条数： "+num);
 		System.out.println("发送指令： "+formatdata);
@@ -267,22 +267,6 @@ public class TagPositionThread{
 		String status = result.getString("status");
 		if(status.equalsIgnoreCase("Ok"))//发送成功
 		{
-			
-			JSONArray tags = result.getJSONArray("tags");
-			for(int i=0;i<tags.size();i++)
-			{
-				JSONObject tag= (JSONObject) tags.getJSONObject(i);
-				String id = tag.getString("id");
-				if(id.equalsIgnoreCase("e2f616644c6e"))
-				{
-					int sequenceNumber = (int)tag.getInteger("sequenceNumber");
-					map.put(sequenceNumber, formatdata);//保存Key和值
-				}
-				else
-				{
-					continue;
-				}
-			}
 		}
 		else
 		{
@@ -290,9 +274,9 @@ public class TagPositionThread{
 		}
 	}
 	
-	@Scheduled(initialDelay = 1000, fixedDelay = 6000)
+	@Scheduled(initialDelay = 1000, fixedDelay = 250)
 	public void receiveTaginformation() throws Exception {
-		System.out.println("schedule sendTaginformation on every 6 s");
+		System.out.println("schedule sendTaginformation on every 250ms");
 		//接收payLoad
 		JSONObject result2 = locationService.getTagPayloadData("e2f616644c6e", "true");
 		JSONArray tags_payload = result2.getJSONArray("tags");
@@ -320,52 +304,17 @@ public class TagPositionThread{
 			}
 			
 		}
-		
-		JSONObject receive = locationService.getQuuppaRequestResponse("e2f616644c6e", "true");
-		JSONArray tags_receive = receive.getJSONArray("tags");
-						
-		for(int j=0;j<tags_receive.size();j++)
-		{
-			JSONObject tag_receive= (JSONObject) tags_receive.getJSONObject(j);
-			String id_receive = tag_receive.getString("id");
-			if(id_receive.equalsIgnoreCase("e2f616644c6e"))
-			{
-				JSONArray requests = tag_receive.getJSONArray("quuppaRequests");
-				//System.out.println("quuppaRequests"+requests);
-				for(int k=0;k<requests.size();k++)
-				{
-					JSONObject Req= (JSONObject) requests.getJSONObject(k);
-					if(Req==null)
-					{
-						continue;
-					}
-					int tag_sequenceNumber = (int)Req.getInteger("sequenceNumber");
-
-					String re = Req.getString("replyData");
-					if(re!=null)
-					{
-						if(map.containsKey(tag_sequenceNumber))
-						{
-							map.remove(tag_sequenceNumber);
-							//System.out.println(tag_sequenceNumber+"received");
-						}
-						//System.out.println(re);
-					}
-					else
-					{
-						System.out.println("replyData is null");
-					}
-				}
-			}
-		}
-		System.out.println("map size : "+map.size());
+		//System.out.println("map size : "+map.size());
 		System.out.println("hashSet size : "+hashset.size());
 		
-		if(num>=100)
+		if(num>=26)
 		{
+			System.out.println("***********************************************************");
+			
 			for (String s:hashset) {
 				System.out.println(s);
 			}
+			
 		}
 	}*/
 }
