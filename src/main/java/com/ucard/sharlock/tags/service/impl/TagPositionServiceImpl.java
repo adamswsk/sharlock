@@ -28,5 +28,10 @@ public class TagPositionServiceImpl extends ServiceImpl<TagPositionMapper, TagPo
 	public List<TagPosition> findpositionbytagid(String tagid) {
 		return tagPositionMapper.findpositionbytagid(tagid);
 	}
+	
+	@Override
+	public List<TagPosition> findposbyidandtime(String tagid,Long BeginPositionTS,Long EndPositionTS) {
+		return tagPositionMapper.findposbyidandtime(tagid,BeginPositionTS,EndPositionTS);
+	}
 
 }

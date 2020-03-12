@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ChinaCard tag map</title>
+  <style>
+    body {
+      margin: 0;
+      overflow: hidden;
+    }
+
+    #label {
+      position: absolute;
+      padding: 10px;
+      background: rgba(255, 255, 255, 0.6);
+      line-height: 1;
+      border-radius: 5px;
+    }
+
+    #video {
+      position: absolute;
+      width: 0;
+      height: 0;
+    }
+  </style>
+</head>
+<body>
+<div id="label"></div>
+<script src="./libs/three.js"></script>
+<script src="./libs/stats.js"></script>
+<script src="./libs/OBJLoader.js"></script>
+<script src="./libs/OrbitControls.js"></script>
+<script src="./libs/MTLLoader.js"></script>
+<script src="./libs/ThreeBSP.js"></script>
+<script src="./libs/dat.gui.js"></script>
+<script src="./libs/ColladaLoader.js"></script>
+<script charset="UTF-8" src="./libs/TrackballControls.js"></script>
+<script charset="UTF-8" src="./libs/FBXLoader.js"></script>
+<script src="./libs/inflate.min.js"></script>
+<script src="./libs/jquery-3.4.1.js"></script>
+<script src="./libs/jquery.timer.js"></script>
+
+<script type="text/javascript" src="./libs/settings.js"></script>
+<!--
+<script type="text/javascript" src="map2D/Map2DInteractionManager.js"></script>
+<script type="text/javascript" src="SelectionManager.js"></script>
+<script type="text/javascript" src="NotificationManager.js"></script>
+<script type="text/javascript" src="filtering/TagFilter.js"></script>
+<script type="text/javascript" src="filtering/KeywordTagFilter.js"></script>
+<script type="text/javascript" src="filtering/CoordinateSystemTagFilter.js"></script>
+<script type="text/javascript" src="map2D/Map2DController.js"></script>
+<script type="text/javascript" src="map3D/Map3DController.js"></script>
+<script type="text/javascript" src="TreeController.js"></script>
+-->
+<script type="text/javascript" src="./libs/Viewport.js"></script>
+<!--
+<script type="text/javascript" src="map2D/GridDrawable.js"></script>
+<script type="text/javascript" src="map2D/PolygonDrawable.js"></script>
+-->
+<script type="text/javascript" src="./libs/TagDrawable.js"></script>
+<script type="text/javascript" src="./libs/Tween.min.js"></script>
+<!--
+<script type="text/javascript" src="map2D/BackgroundImageDrawable.js"></script>
+<script type="text/javascript" src="map2D/InactiveAreaRendererDrawable.js"></script>
+<script type="text/javascript" src="map3D/DomeControls.js"></script>
+<script type="text/javascript" src="map3D/Stats.js"></script>
+-->
+<script type="text/javascript" src="./libs/TagDataRetriever.js"></script>
+<script type="text/javascript" src="./libs/FileSaver.js"></script>
+<!--
+<script type="text/javascript" src="map2D/Map2D.js"></script>
+<script type="text/javascript" src="main.js"></script>
+-->
+	<video id="video1" position="absolute" width="0" height="0" autoplay loop muted>
+    <source src="./video/VID_1.mp4">
+  </video>
+  <video id="video2" position="absolute" width="0" height="0" autoplay loop muted>
+    <source src="./video/VID_2.mp4">
+  </video>
+  <video id="video3" position="absolute" width="0" height="0" autoplay loop muted>
+    <source src="./video/VID_3.mp4">
+  </video>  
+<video id="video4" position="absolute" width="0" height="0" autoplay loop muted>
+    <source src="./video/VID_4.mp4">
+  </video>
+<script type="text/javascript" src="./libs/show3D.js"> </script>
+
+<!--
+<script>
+  $(document).ready(main);
+</script>
+-->
+</body>
+</html>

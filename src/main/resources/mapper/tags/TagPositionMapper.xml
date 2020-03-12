@@ -26,5 +26,9 @@
 	<select id="findpositionbytagid" resultMap="PositionResultMap">
 		select <include refid="Position_Column_List" /> from tag_position where tag_id = #{tagid} order by tag_positionTS
 	</select>
-	
+	<select id="findposbyidandtime" resultMap="PositionResultMap">
+		select <include refid="Position_Column_List" /> from tag_position where tag_id = #{arg0} and (tag_positionTS &gt;= #{arg1} and tag_positionTS &lt;= #{arg2})
+	</select>
+	<!-- select <include refid="Position_Column_List" /> from tag_position where tag_id = #{tagid} and (tag_positionTS &gt;= #{BeginPositionTS} and tag_positionTS &lt;= #{EndPositionTS}) -->
+	<!-- select <include refid="Position_Column_List" /> from tag_position where tag_id = #{arg0} and (tag_positionTS &gt;= #{arg1} and tag_positionTS &lt;= #{arg2}) -->
 </mapper>

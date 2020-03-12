@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ucard.sharlock.tags.mapper.CategorizationinfoMapper">
+
+	<resultMap id="CategorizationinfoResultMap" type="com.ucard.sharlock.tags.entity.Categorizationinfo">        
+		<!-- <id column="id" property="" />   -->      
+		<result column="user_post" property="userPost" />        
+		<result column="tag_group" property="tagGroup" />        
+		<result column="tag_color" property="tagColor" />
+		<result column="tag_config" property="tagConfig" />
+	</resultMap>  
+	<sql id="Post_Column_List">        
+		user_post    
+	</sql>
+	    
+	<select id="getpostlist" resultMap="CategorizationinfoResultMap">
+		select <include refid="Post_Column_List" /> from categorizationinfo
+	</select>
+	
+</mapper>

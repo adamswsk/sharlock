@@ -13,17 +13,21 @@ import org.springframework.web.bind.annotation.RestController;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.ucard.sharlock.tags.entity.Categorizationinfo;
 import com.ucard.sharlock.tags.entity.TagAreainfo;
 import com.ucard.sharlock.tags.entity.TagBaseinfo;
 import com.ucard.sharlock.tags.entity.TagPosition;
 import com.ucard.sharlock.tags.entity.TagStatusinfo;
 import com.ucard.sharlock.tags.entity.TagZonesinfo;
+import com.ucard.sharlock.tags.entity.Users;
+import com.ucard.sharlock.tags.service.ICategorizationinfoService;
 import com.ucard.sharlock.tags.service.ILocationService;
 import com.ucard.sharlock.tags.service.ITagAreainfoService;
 import com.ucard.sharlock.tags.service.ITagBaseinfoService;
 import com.ucard.sharlock.tags.service.ITagPositionService;
 import com.ucard.sharlock.tags.service.ITagStatusinfoService;
 import com.ucard.sharlock.tags.service.ITagZonesinfoService;
+import com.ucard.sharlock.tags.service.IUsersService;
 
 /**
  * <p>
@@ -54,6 +58,10 @@ public class TagAPI4FrontEndController {
 	private ITagBaseinfoService tagBaseinfoService;
 	@Autowired
 	private ITagStatusinfoService tagStatusinfoService;
+	@Autowired
+	private IUsersService userService;
+	@Autowired
+	private ICategorizationinfoService categorizationinfoService;
 	
 	@GetMapping(value="/getTagInfo")
 	public JSONObject getTagInfo()
@@ -272,9 +280,106 @@ public class TagAPI4FrontEndController {
 	
 	@GetMapping(value="/getTagPositionTrail")
 	public List<TagPosition> getTagPositionTrail(
-			@RequestParam(value = "tagid",required = true) String tagid)
+			@RequestParam(value = "tagid",required = true) String tagid,
+			@RequestParam(value = "BeginPositionTS",required = false) Long BeginPositionTS,
+			@RequestParam(value = "EndPositionTS",required = false) Long EndPositionTS)
 	{
-		return tagPositionService.findpositionbytagid(tagid);
+		if(BeginPositionTS != null && BeginPositionTS != 0 && EndPositionTS != null && EndPositionTS != 0)
+		{
+			return tagPositionService.findposbyidandtime(tagid, BeginPositionTS,EndPositionTS);
+		}
+		else
+		{
+			return tagPositionService.findpositionbytagid(tagid);
+		}
+	}
+	
+	@GetMapping(value="/bindTagAndUser")
+	public boolean bindTagAndUser(
+			@RequestParam(value = "tagid",required = false) String tagid,
+			@RequestParam(value = "UserName",required = true) String UserName,
+			@RequestParam(value = "UserID",required = true) String UserID,
+			@RequestParam(value = "UserPost",required = false) String UserPost)
+	{
+		Users entity = new Users();
+		entity.setTagId(tagid);
+		entity.setUserName(UserName);
+		entity.setUserId(UserID);
+		entity.setUserPost(UserPost);
+		
+		return userService.save(entity);
+	}
+	
+	@GetMapping(value="/getPostType")
+	public List<Categorizationinfo> getPostType()
+	{		
+		return categorizationinfoService.getpostlist();
+	}
+	
+	@GetMapping(value="/configNewTag")
+	public boolean configNewTag()
+	{	
+		//查找users表，看哪些标签未设置
+		QueryWrapper<Users> queryUserWrapper = new QueryWrapper<>();
+		queryUserWrapper.eq("station", 0);
+		List<Users> list_users = userService.list(queryUserWrapper);
+		for(Users user:list_users)
+		{
+			//获取标签ID、姓名、岗位
+			if(user.getTagId()!=null && user.getTagId()!="")
+			{
+				String post = user.getUserPost();
+				String name = user.getUserName();
+				String tagid = user.getTagId();
+				//根据岗位查找Group和Color信息
+				QueryWrapper<Categorizationinfo> queryCategorizationinfoWrapper = new QueryWrapper<>();
+				queryCategorizationinfoWrapper.eq("user_post", post);
+				Categorizationinfo info = categorizationinfoService.getOne(queryCategorizationinfoWrapper);
+				String group = info.getTagGroup();
+				String color = info.getTagColor();
+				String config = info.getTagConfig();
+				//设置标签，成功后将users表更新
+				locationService.setTagGroup(null, group, tagid, null, null, null);
+				locationService.configureTag(null, config, tagid, null, null, "230");
+				locationService.modifyTag(name, null, tagid, color, null);
+			}
+		}
+		
+		return true;
+	}
+	
+	@GetMapping(value="/refreshTagConfig")
+	public String refreshTagConfig()
+	{	
+		int counter = 0;
+		//查找所有标注是0的标签
+		//查找users表，看哪些标签未设置
+		QueryWrapper<Users> queryUserWrapper = new QueryWrapper<>();
+		queryUserWrapper.eq("station", 0);
+		List<Users> list_users = userService.list(queryUserWrapper);
+		for(Users user:list_users)
+		{
+			//检查这些标签是否已经配置
+			String tagid = user.getTagId();
+			JSONObject result = locationService.getTagInfo("2", tagid, null, null, null, "true", null, null, null, null, null);
+			JSONArray tags = result.getJSONArray("tags");
+			if(tags!=null)
+			{
+				JSONObject tag= (JSONObject) tags.getJSONObject(0);
+				if(tag.getString("color")!=null && tag.getString("group")!=null)
+				{
+					//已经配置
+					queryUserWrapper.eq("tag_id", tagid);
+					user.setStation(true);
+					userService.update(user, queryUserWrapper);
+					counter++;
+				}
+			}
+		}
+		
+		//导出配置文件
+		locationService.exportTags(null, null, "ucardTags", null);
+		return "需要配置标签数： "+list_users.size()+" 已配置标签： "+counter;
 	}
 	
 

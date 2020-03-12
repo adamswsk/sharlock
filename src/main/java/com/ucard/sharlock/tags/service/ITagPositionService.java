@@ -16,4 +16,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
 public interface ITagPositionService extends IService<TagPosition> {
 
 	List<TagPosition> findpositionbytagid(String tagid);
+	List<TagPosition> findposbyidandtime(String tagid,Long BeginPositionTS,Long EndPositionTS);
 }

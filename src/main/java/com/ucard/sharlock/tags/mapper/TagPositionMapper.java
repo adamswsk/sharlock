@@ -16,4 +16,5 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 public interface TagPositionMapper extends BaseMapper<TagPosition> {
 
 	List<TagPosition> findpositionbytagid(String tagid);
+	List<TagPosition> findposbyidandtime(String tagid,Long BeginPositionTS,Long EndPositionTS);
 }

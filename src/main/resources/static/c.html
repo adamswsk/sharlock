@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ChinaCard tag map</title>
+
+</head>
+<body>
+<script src="https://cdn.bootcss.com/FileSaver.js/2014-11-29/FileSaver.js"></script>
+ 
+<script>
+var loc_count=0;
+
+function store(){
+    if(!window.localStorage){
+        console.log("浏览器支持localstorage");
+    }else{
+        var storage=window.localStorage;
+        //写入a字段
+        //storage["a"]=1;
+        //写入b字段
+        var name='sharlock-001';
+        var color=0x9cb2d1;
+        var pxPos=Math.ceil(Math.random()*100);
+        var pyPos=Math.ceil(Math.random()*100);
+        //storage.setItem(loc_count,name+','+color+','+pxPos+','+pyPos);
+        //storage[loc_count]=name+','+color+','+pxPos+','+pyPos;
+        //写入c字段
+        storage.setItem("c"+loc_count,name+','+color+','+pxPos+','+pyPos);
+        //console.log(storage.loc_count);
+        console.log(storage);
+        //console.log(typeof storage["a"]);
+        // console.log(typeof storage["b"]);
+        // console.log(typeof storage["c"]);
+        /*分割线*/
+        //storage.a=4;
+        //console.log(storage.a);
+        loc_count++;
+    }
+}
+setInterval("store()", 500);
+
+</script>
+</body>
+</html>

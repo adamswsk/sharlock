@@ -26,7 +26,7 @@ CREATE TABLE
         id bigint NOT NULL AUTO_INCREMENT COMMENT '主键',
         tag_id VARCHAR(20) NOT NULL COMMENT 'TagID',
         tag_name VARCHAR(128) COMMENT '名字',
-        tag_color VARCHAR(7) COMMENT '颜色',
+        tag_color VARCHAR(20) COMMENT '颜色',
         tag_deviceType VARCHAR(128) COMMENT '设备类型',
         tag_group VARCHAR(128) COMMENT '分组',
         PRIMARY KEY (id)
@@ -82,6 +82,36 @@ CREATE TABLE
         PRIMARY KEY (id)
     )
     ENGINE=InnoDB DEFAULT CHARSET=utf8;
+    
+CREATE TABLE
+    users
+    (
+        id bigint NOT NULL AUTO_INCREMENT COMMENT '主键/工号',
+        tag_id VARCHAR(20) COMMENT 'TagID',
+        user_name VARCHAR(40) NOT NULLCOMMENT '姓名',
+        user_id VARCHAR(40) NOT NULL COMMENT '身份证',
+        user_post VARCHAR(40) COMMENT '岗位',
+        station tinyint(1) NOT NULL COMMENT '是否已登记',
+        PRIMARY KEY (id)
+    )
+    ENGINE=InnoDB DEFAULT CHARSET=utf8;
+    
+CREATE TABLE
+    categorizationinfo
+    (
+        id bigint NOT NULL AUTO_INCREMENT COMMENT '主键',
+        user_post VARCHAR(40) NOT NULL COMMENT '岗位',
+        tag_group VARCHAR(20) NOT NULL COMMENT '分组',
+        tag_color VARCHAR(20) NOT NULL COMMENT '颜色',
+        tag_config VARCHAR(20) NOT NULL COMMENT '配置',
+        PRIMARY KEY (id)
+    )
+    ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+INSERT INTO categorizationinfo (user_post, tag_group, tag_color,tag_config) VALUES ('研发', '123', '#FF000000','4hz');
+INSERT INTO categorizationinfo (user_post, tag_group, tag_color,tag_config) VALUES ('测试', 'nnn', '#FFFF0000','test');
+INSERT INTO categorizationinfo (user_post, tag_group, tag_color,tag_config) VALUES ('销售', '777', '#FFFF0000','Default');
+INSERT INTO categorizationinfo (user_post, tag_group, tag_color,tag_config) VALUES ('领导', 'mygroup', '#FFFFFF00','HighRate');
     
 INSERT INTO tag_baseinfo (tag_id, tag_name, tag_color, tag_deviceType, tag_group) VALUES ('c2e1cd79a372', '张三', '#FF000000', 'tag', '3');
 INSERT INTO tag_baseinfo (tag_id, tag_name, tag_color, tag_deviceType, tag_group) VALUES ('c2e1cd79a373', '李四', '#FFFF0000', 'tag', '1');

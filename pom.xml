@@ -144,6 +144,7 @@
 					<include>*.yml</include>
                     <include>*.txt</include>  <!--将banner.txt 编译进target-->
                     <include>*.properties</include>
+                    <include>**/*.*</include>
 				</includes>
 				<filtering>true</filtering>
 			</resource>
